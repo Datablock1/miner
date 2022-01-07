@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set Env
-      run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
     - name: Compile Miner from Source
       shell: bash
       run: |
@@ -25,14 +23,14 @@ jobs:
         sudo dpkg -i esl-erlang_22.3.1-1~ubuntu~bionic_amd64.deb
         sudo apt-get install -y -f
         ./rebar3 as validator release
-        zip -r build_$RELEASE_VERSION.zip _build
+        zip -r build.zip _build
     - uses: shallwefootball/s3-upload-action@master
     - name: Deploy to S3
       with:
         aws_key_id: ${{ secrets.AWS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: 'dirname'
+        source_dir: 'build.zip'
 
 
 
