@@ -1,4 +1,4 @@
-name: Erlang CI
+name: Helium CI/CD
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   compile:
-    name: Instal Deps and Compile
+    name: Helium CI/CD
     runs-on: ubuntu-latest
     
     steps:
@@ -32,12 +32,13 @@ jobs:
         zip -r build-${{github.run_id}}.zip _build
         
     - name: Deploy to S3
-      uses: shallwefootball/s3-upload-action@master
+      uses: swimlane/s3-upload-file-action@master
       with:
-        aws_key_id: ${{ secrets.AWS_KEY_ID }}
+        aws_access_key_id: ${{ secrets.AWS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: 'build-${{github.run_id}}.zip'
-        
+        file_path: 'build-${{github.run_id}}.zip'
+        file_mime_type: 'application/zip'
+
 
 
