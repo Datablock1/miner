@@ -22,7 +22,6 @@ jobs:
         sudo apt update -y
         sudo dpkg -i esl-erlang_22.3.1-1~ubuntu~bionic_amd64.deb
         sudo apt-get install -y -f
-        cd miner
         ./rebar3 as validator release
 
 
