@@ -40,6 +40,6 @@ jobs:
 
     - name: Upload files to S3 with AWS CLI
       run: |
-        aws s3 cp build-${{github.run_id}}.zip s3://${{ secrets.AWS_BUCKET }} --delete
+        aws s3 cp build-${{github.run_id}}.zip s3://${{ secrets.AWS_BUCKET }}
 
 
