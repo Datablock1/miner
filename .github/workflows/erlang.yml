@@ -32,7 +32,7 @@ jobs:
         zip -r build-${{github.run_id}}.zip _build
         
     - name: Deploy to S3
-      uses: swimlane/s3-upload-file-action@master
+      uses: swimlane/s3-upload-file-action@main
       with:
         aws_access_key_id: ${{ secrets.AWS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
