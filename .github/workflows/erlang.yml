@@ -5,13 +5,15 @@ on:
     branches: [ master ]
 
 jobs:
-
-  build:
-
+  compile:
+    name: Instal Deps and Compile
     runs-on: ubuntu-latest
+    
     steps:
+    - name: Checkout
     - uses: actions/checkout@v2
-    - name: Compile Miner from Source
+    
+    - name: Install Dependencies
       shell: bash
       run: |
         sudo apt-get update -y && sudo apt-get install -y libgtk2.0-0 zip
@@ -22,15 +24,20 @@ jobs:
         sudo apt update -y
         sudo dpkg -i esl-erlang_22.3.1-1~ubuntu~bionic_amd64.deb
         sudo apt-get install -y -f
+        
+    - name: Compile and Zip
+      shell: bash
+      run: |
         ./rebar3 as validator release
-        zip -r build.zip _build
-    - uses: shallwefootball/s3-upload-action@master
+        zip -r build-$GITHUB_ACTION.zip _build
+
     - name: Deploy to S3
+    - uses: shallwefootball/s3-upload-action@master
       with:
         aws_key_id: ${{ secrets.AWS_KEY_ID }}
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         aws_bucket: ${{ secrets.AWS_BUCKET }}
-        source_dir: 'build.zip'
+        source_dir: 'build-$GITHUB_ACTION.zip'
 
 
 
